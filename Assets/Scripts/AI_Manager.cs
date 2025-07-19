@@ -3,11 +3,16 @@ using System.Collections;
 
 public class PlayerCloneManager : MonoBehaviour
 {
+    // Singleton
     public static PlayerCloneManager Instance { get; private set; }
 
+    [Header("Clone Setup")]
     public Sprite playerSprite;
-
     public RuntimeAnimatorController cloneAnimatorController;
+
+    [Header("Audio Sources")]
+    public AudioSource aiDeployedAudioSource;
+    public AudioSource aiDisappearedAudioSource;
 
     private bool hasSpawned = false;
 
@@ -16,9 +21,11 @@ public class PlayerCloneManager : MonoBehaviour
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
-            return;
         }
-        Instance = this;
+        else
+        {
+            Instance = this;
+        }
     }
 
     void Update()
@@ -29,59 +36,50 @@ public class PlayerCloneManager : MonoBehaviour
         }
     }
 
-    
-
     void SpawnClone()
     {
         GameObject clone = new GameObject("PlayerClone");
 
-        // Add SpriteRenderer
-        SpriteRenderer sr = clone.AddComponent<SpriteRenderer>();
+        // Setup SpriteRenderer
+        SpriteRenderer cloneSR = clone.AddComponent<SpriteRenderer>();
         SpriteRenderer originalSR = GetComponent<SpriteRenderer>();
+        cloneSR.sprite = playerSprite;
+        cloneSR.sortingLayerID = originalSR.sortingLayerID;
+        cloneSR.sortingOrder = originalSR.sortingOrder;
+        cloneSR.flipX = originalSR.flipX;
 
-        sr.sprite = playerSprite;
-        sr.sortingLayerID = originalSR.sortingLayerID;
-        sr.sortingOrder = originalSR.sortingOrder;
-        sr.flipX = originalSR.flipX;
-        sr.flipY = originalSR.flipY;
-        sr.color = originalSR.color;
+        // Setup Collider & Animator
+        clone.AddComponent<PolygonCollider2D>();
+        Animator cloneAnimator = clone.AddComponent<Animator>();
+        cloneAnimator.runtimeAnimatorController = cloneAnimatorController;
 
-        // Add PolygonCollider2D
-        PolygonCollider2D polygonCollider = clone.AddComponent<PolygonCollider2D>();
-
-        // Add Animator
-        Animator animator = clone.AddComponent<Animator>();
-        animator.runtimeAnimatorController = cloneAnimatorController;
-
-        // Position and scale
+        // Set transform
         clone.transform.position = transform.position;
         clone.transform.localScale = transform.localScale;
 
         hasSpawned = true;
 
-        // Optional: Destroy after animation time
-        StartCoroutine(DestroyAfter(clone, 10f));
+        // Play spawn audio
+        aiDeployedAudioSource?.Play();
+
+        StartCoroutine(DestroyAfterDelay(clone, 10f));
     }
 
-
-    IEnumerator DestroyAfter(GameObject obj, float delay)
+    IEnumerator DestroyAfterDelay(GameObject clone, float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        // Destroy the clone
-        Destroy(obj);
+        // Play disappear audio
+        aiDisappearedAudioSource?.Play();
 
-        // Find all "FoundTarget" tagged objects
-        GameObject[] foundTargets = GameObject.FindGameObjectsWithTag("Glitched");
+        Destroy(clone);
 
-        foreach (GameObject target in foundTargets)
+        // Set "Found" bool on all Glitched objects
+        foreach (GameObject glitchedObj in GameObject.FindGameObjectsWithTag("Glitched"))
         {
-            Animator animator = target.GetComponent<Animator>();
-            if (animator != null)
-            {
-                animator.SetBool("Found", true);
-            }
+            Animator anim = glitchedObj.GetComponent<Animator>();
+            if (anim != null)
+                anim.SetBool("Found", true);
         }
     }
-
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FixableObject : MonoBehaviour
 {
@@ -8,6 +8,7 @@ public class FixableObject : MonoBehaviour
     private bool isFixed = false;
 
     private Animator animator;
+    public AudioSource fixSuccessAudio;  // 🔊 Sound when fixed
 
     void Start()
     {
@@ -16,22 +17,23 @@ public class FixableObject : MonoBehaviour
 
     void Update()
     {
-        // Only allow fixing if 'Found' is true and not already fixed
         if (playerInRange && !isFixed && animator.GetBool("Found"))
         {
             if (Input.GetKey(KeyCode.E))
             {
                 holdTime += Time.deltaTime;
-
                 if (holdTime >= requiredHoldTime)
                 {
                     animator.SetBool("Fixed", true);
                     isFixed = true;
+
+                    if (fixSuccessAudio != null)
+                        fixSuccessAudio.Play();
                 }
             }
             else
             {
-                holdTime = 0f; // reset if E is released early
+                holdTime = 0f;
             }
         }
     }
@@ -39,9 +41,7 @@ public class FixableObject : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
-        {
             playerInRange = true;
-        }
     }
 
     void OnTriggerExit2D(Collider2D other)
