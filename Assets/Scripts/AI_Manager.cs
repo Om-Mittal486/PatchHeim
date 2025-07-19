@@ -67,6 +67,21 @@ public class PlayerCloneManager : MonoBehaviour
     IEnumerator DestroyAfter(GameObject obj, float delay)
     {
         yield return new WaitForSeconds(delay);
+
+        // Destroy the clone
         Destroy(obj);
+
+        // Find all "FoundTarget" tagged objects
+        GameObject[] foundTargets = GameObject.FindGameObjectsWithTag("Glitched");
+
+        foreach (GameObject target in foundTargets)
+        {
+            Animator animator = target.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.SetBool("Found", true);
+            }
+        }
     }
+
 }
