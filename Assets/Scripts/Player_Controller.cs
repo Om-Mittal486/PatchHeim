@@ -5,18 +5,17 @@ public class PlayerMovement : MonoBehaviour
     public static PlayerMovement Instance { get; private set; }
 
     public float moveSpeed = 5f;
-
     private Rigidbody2D rb;
     private Vector2 moveInput;
     public bool isClone = false;
 
+    private Animator animator;
 
     void Awake()
     {
-        // Singleton Setup
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // Prevent duplicates
+            Destroy(gameObject);
         }
         else
         {
@@ -27,15 +26,23 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (isClone) return; // Don’t move if it’s a clone
+        if (isClone) return;
 
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
+
+        if (animator != null)
+        {
+            animator.SetFloat("Horizontal", moveInput.x);
+            animator.SetFloat("Vertical", moveInput.y);
+            animator.SetFloat("Speed", moveInput.sqrMagnitude);
+        }
     }
 
     void FixedUpdate()

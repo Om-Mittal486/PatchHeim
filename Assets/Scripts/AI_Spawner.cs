@@ -7,6 +7,8 @@ public class PlayerCloneManager : MonoBehaviour
 
     public Sprite playerSprite;
 
+    public RuntimeAnimatorController cloneAnimatorController;
+
     private bool hasSpawned = false;
 
     void Awake()
@@ -27,10 +29,13 @@ public class PlayerCloneManager : MonoBehaviour
         }
     }
 
+    
+
     void SpawnClone()
     {
         GameObject clone = new GameObject("PlayerClone");
 
+        // Add SpriteRenderer
         SpriteRenderer sr = clone.AddComponent<SpriteRenderer>();
         SpriteRenderer originalSR = GetComponent<SpriteRenderer>();
 
@@ -41,12 +46,23 @@ public class PlayerCloneManager : MonoBehaviour
         sr.flipY = originalSR.flipY;
         sr.color = originalSR.color;
 
+        // Add PolygonCollider2D
+        PolygonCollider2D polygonCollider = clone.AddComponent<PolygonCollider2D>();
+
+        // Add Animator
+        Animator animator = clone.AddComponent<Animator>();
+        animator.runtimeAnimatorController = cloneAnimatorController;
+
+        // Position and scale
         clone.transform.position = transform.position;
         clone.transform.localScale = transform.localScale;
 
         hasSpawned = true;
+
+        // Optional: Destroy after animation time
         StartCoroutine(DestroyAfter(clone, 10f));
     }
+
 
     IEnumerator DestroyAfter(GameObject obj, float delay)
     {

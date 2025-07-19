@@ -1512,7 +1512,6 @@ Transform:
   - {fileID: 317950338}
   - {fileID: 947735397}
   - {fileID: 126357912}
-  - {fileID: 776902894}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &452468464
@@ -3785,11 +3784,11 @@ Transform:
   m_GameObject: {fileID: 776902890}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.91251683, y: -0.82236457, z: -2.003481}
+  m_LocalPosition: {x: -2.82, y: -0.23000002, z: -1}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 417484221}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &776902895
 MonoBehaviour:
@@ -3840,6 +3839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSprite: {fileID: 4723107735738678597, guid: b180936c80b05554d9fcf7dd369e36ae, type: 3}
+  cloneAnimatorController: {fileID: 9100000, guid: 07fb001a8664c754d811c3593657433e, type: 2}
 --- !u!1 &787096717
 GameObject:
   m_ObjectHideFlags: 0
@@ -11974,4 +11974,5 @@ SceneRoots:
   - {fileID: 277811938}
   - {fileID: 1986019107}
   - {fileID: 417484221}
+  - {fileID: 776902894}
   - {fileID: 1017817993}
