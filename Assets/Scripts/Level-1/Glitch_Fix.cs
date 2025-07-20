@@ -8,7 +8,7 @@ public class FixableObject : MonoBehaviour
     private bool isFixed = false;
 
     private Animator animator;
-    public AudioSource fixSuccessAudio;  // 🔊 Sound when fixed
+    public AudioSource fixSuccessAudio; 
 
     void Start()
     {

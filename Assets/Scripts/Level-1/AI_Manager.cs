@@ -3,7 +3,6 @@ using System.Collections;
 
 public class PlayerCloneManager : MonoBehaviour
 {
-    // Singleton
     public static PlayerCloneManager Instance { get; private set; }
 
     [Header("Clone Setup")]
