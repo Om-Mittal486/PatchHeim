@@ -16,8 +16,11 @@ public class DialogueManager : MonoBehaviour
     private Queue<DialogueLine> lines;
 
     public bool isDialogueActive = false;
-    public float typingSpeed = 0.2f;
+    public float typingSpeed = 0.05f;
     public Animator animator;
+
+    private bool isTyping;
+    private string currentSentence;
 
     void Awake()
     {
@@ -29,16 +32,38 @@ public class DialogueManager : MonoBehaviour
         lines = new Queue<DialogueLine>();
     }
 
+    void Update()
+    {
+        if (!isDialogueActive) return;
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (isTyping)
+            {
+                // Finish current sentence instantly
+                StopAllCoroutines();
+                dialogueArea.text = currentSentence;
+                isTyping = false;
+            }
+            else
+            {
+                // Go to next dialogue line
+                DisplayNextDialogueLine();
+            }
+        }
+    }
 
     public void StartDialogue(Dialogue dialogue)
     {
         isDialogueActive = true;
         animator.Play("show");
+
         lines.Clear();
         foreach (DialogueLine dialogueLine in dialogue.dialogueLines)
         {
             lines.Enqueue(dialogueLine);
         }
+
         DisplayNextDialogueLine();
     }
 
@@ -49,21 +74,29 @@ public class DialogueManager : MonoBehaviour
             EndDialogue();
             return;
         }
+
         DialogueLine currentLine = lines.Dequeue();
+
         characterIcon.sprite = currentLine.character.Icon;
         characterName.text = currentLine.character.Name;
+
         StopAllCoroutines();
-        StartCoroutine(TypeSentence(currentLine));
+        StartCoroutine(TypeSentence(currentLine.line));
     }
 
-    IEnumerator TypeSentence(DialogueLine dialogueLine)
+    IEnumerator TypeSentence(string sentence)
     {
+        isTyping = true;
+        currentSentence = sentence;
         dialogueArea.text = "";
-        foreach (char letter in dialogueLine.line.ToCharArray())
+
+        foreach (char letter in sentence.ToCharArray())
         {
             dialogueArea.text += letter;
             yield return new WaitForSeconds(typingSpeed);
         }
+
+        isTyping = false;
     }
 
     void EndDialogue()
