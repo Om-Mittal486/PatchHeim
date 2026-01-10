@@ -26,13 +26,6 @@ Nomad - The Uncertain Route is a Top-Down 2D RPG developed during the my first y
 | Interact | E |
 | Clone | Q |
 
-## Screenshots
-
-| Gameplay | Gameplay | Gameplay | Gameplay |
-|---------|----------|----------|----------|
-| <img src="Screenshots/Screenshot%20(5).png" width="250"/> | <img src="Screenshots/Screenshot%20(6).png" width="250"/> | <img src="Screenshots/Screenshot%20(7).png" width="250"/> | <img src="Screenshots/Screenshot%20(8).png" width="250"/> |
-| <img src="Screenshots/Screenshot%20(9).png" width="250"/> | <img src="Screenshots/Screenshot%20(10).png" width="250"/> | <img src="Screenshots/Screenshot%20(11).png" width="250"/> | <img src="Screenshots/Screenshot%20(12).png" width="250"/> |
-
 ## Get Started (Local Setup)
 
 ### Clone the Repository
